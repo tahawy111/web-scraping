@@ -1,5 +1,6 @@
 // Import puppeteer
 import puppeteer, { Browser } from "puppeteer";
+import fs from "fs";
 
 const url = "https://www.amazon.com/s?k=amazon+basics&page=1";
 
@@ -14,6 +15,9 @@ const url = "https://www.amazon.com/s?k=amazon+basics&page=1";
   await page.goto(url, { waitUntil: "load" });
 
   let isBtnDisabled = false;
+
+  fs.writeFile("results.csv", `title,price,image
+  `, () => {});
 
   while (!isBtnDisabled) {
     const totalProducts: any[] = [];
@@ -40,26 +44,32 @@ const url = "https://www.amazon.com/s?k=amazon+basics&page=1";
       };
 
       totalProducts.push(product);
+      fs.appendFile(
+        "results.csv",
+        `${product.title?.replace(/,/g,".")}, ${product.price}, ${product.image}
+        `,
+        (err) => {
+          if(err) throw err
+          console.log("Saved!")
+        }
+      );
     }
 
     await page.waitForSelector(".s-pagination-item.s-pagination-next", {
       visible: true,
     });
-
     const isDisabled =
       (await page.$(
         ".s-pagination-item.s-pagination-next.s-pagination-disabled"
       )) !== null;
 
     isBtnDisabled = isDisabled;
-
     if (!isDisabled) {
-      await page.click(".s-pagination-item.s-pagination-next");
-      await page.waitForNavigation({ waitUntil: "networkidle2" });
+      await Promise.all([
+        page.click(".s-pagination-item.s-pagination-next"),
+        page.waitForNavigation({ waitUntil: "networkidle2" }),
+      ]);
     }
-
-    console.log(totalProducts);
-    console.log(totalProducts.length);
   }
 
   // Close browser.
