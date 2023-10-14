@@ -1,8 +1,7 @@
 // Import puppeteer
 import puppeteer, { Browser } from "puppeteer";
 
-const url =
-  "https://www.amazon.com/s?k=amazon+basics&page=7";
+const url = "https://www.amazon.com/s?k=amazon+basics&page=7";
 
 (async () => {
   // Launch the browser
@@ -12,35 +11,12 @@ const url =
   const page = await browser.newPage();
 
   // Go to your site
-  await page.goto(url);
+  await page.goto(url, { waitUntil: "load" });
 
-  const productsHandles = await page.$$(
-    ".puis-card-container > .a-section.a-spacing-base"
-  );
-  let totalProducts: any[] = [];
-  for (const productHandle of productsHandles) {
-    const product = {
-      title: await page.evaluate(
-        (document) =>
-          document.querySelector(".a-section h2 > a > span")?.textContent,
-        productHandle
-      ),
-      price: await page.evaluate(
-        (document) =>
-          document.querySelector(".a-price > .a-offscreen")?.textContent,
-        productHandle
-      ),
-      image: await page.evaluate(
-        (document) =>
-          document.querySelector(".s-image")?.getAttribute("src"),
-        productHandle
-      ),
-    };
+  const isDisabled = (await page.$(".s-pagination-item.s-pagination-disabled")) !== null;
 
-    totalProducts.push(product)
-  }
-  console.log(totalProducts);
-  console.log(totalProducts.length);
+  console.log(isDisabled);
+  
 
   // Close browser.
   await browser.close();
