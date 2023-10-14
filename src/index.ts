@@ -1,7 +1,10 @@
 // Import puppeteer
 import puppeteer, { Browser } from "puppeteer";
 
-const url = "https://www.amazon.com/s?k=amazon+basics&page=1";
+const urls = [
+  "https://www.amazon.eg/s?k=iphone&crid=17MGTPY30SD08&sprefix=iphone%2Caps%2C180&ref=nb_sb_noss_1",
+  "https://www.amazon.eg/s?k=mouse+pad&crid=3DMXC7CCTHSXK&sprefix=mouse+pad%2Caps%2C131&ref=nb_sb_noss_1",
+];
 
 (async () => {
   // Launch the browser
@@ -11,7 +14,8 @@ const url = "https://www.amazon.com/s?k=amazon+basics&page=1";
   const page = await browser.newPage();
 
   // Go to your site
-  await page.goto(url, { waitUntil: "load" });
+  for(const url of urls) {
+    await page.goto(url, { waitUntil: "load" });
 
   let isBtnDisabled = false;
 
@@ -77,6 +81,7 @@ const url = "https://www.amazon.com/s?k=amazon+basics&page=1";
         page.waitForNavigation({ waitUntil: "networkidle2" }),
       ]);
     }
+  }
   }
 
   // Close browser.

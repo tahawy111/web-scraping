@@ -11,7 +11,8 @@
   "license": "ISC",
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "puppeteer": "^21.3.8"
+    "puppeteer": "^21.3.8",
+    "puppeteer-cluster": "^0.23.0"
   },
   "devDependencies": {
     "ts-node": "^10.9.1"
