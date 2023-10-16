@@ -12,7 +12,9 @@
   "types": "./dist/index.d.ts",
   "dependencies": {
     "puppeteer": "^21.3.8",
-    "puppeteer-cluster": "^0.23.0"
+    "puppeteer-cluster": "^0.23.0",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2"
   },
   "devDependencies": {
     "ts-node": "^10.9.1"
